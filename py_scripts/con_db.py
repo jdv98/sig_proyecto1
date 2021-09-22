@@ -12,11 +12,11 @@ def con_db(query: str):
         cur = con.cursor()
         cur.execute(query)
         retornar = cur.fetchall()
-    except:
-        retornar = None
-    finally:
+        cur.close()
         con.close()
-        #cur.close()
+    except:
+        retornar = [[""]]
+    finally:
         return retornar
 
 if(__name__ == '__main__'):
