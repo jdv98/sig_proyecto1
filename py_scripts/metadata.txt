@@ -4,6 +4,4 @@ qgisMinimumVersion=3.0
 description=Plugin del primer proyecto de SIG
 about=Plugin del primer proyecto del segundo semestre del 2021 de SIG, ITCR.
 version=1.0v
-author=José Daniel Villegas Paniagua, Verónica Álvarez Salas
-email=jvillegas98@estudiantec.cr
 repository=https://github.com/jdv98/sig_proyecto1
