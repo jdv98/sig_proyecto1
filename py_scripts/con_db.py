@@ -1,12 +1,16 @@
 def con_db(query: str):
     from psycopg2 import connect
     from psycopg2.extras import DictCursor
+    from configparser import ConfigParser
+    from qgis.core import QgsProject
     try:
+        cp=ConfigParser()
+        cp.read(QgsProject.instance().readPath("./")+'/database.ini')
         con = connect(
-            host="192.168.100.3",
-            database="Proyecto1GIS",
-            user="postgres",
-            password="postgres",
+            host=cp._sections['postgresql']['host'],
+            database=cp._sections['postgresql']['database'],
+            user=cp._sections['postgresql']['user'],
+            password=cp._sections['postgresql']['password'],
             cursor_factory=DictCursor)
 
         cur = con.cursor()
