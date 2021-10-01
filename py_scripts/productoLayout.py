@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from .ingredientesGui import Ingredientes
+from .ingredientesLayout import Ingredientes
 
 class Producto(QVBoxLayout):
     def __init__(self,widgetParent):
@@ -11,8 +11,12 @@ class Producto(QVBoxLayout):
         self.ingredientes=[]
         self.build()
     
-    def build(self):
-        self.combo_cultivos = self.query_fill_combo(QComboBox(self.widgetParent),'SELECT * FROM cultivos()')
+    def build(self): #agrega todos los widgets al layout
+        self.label = QLabel(self.widgetParent)
+        self.label.setText("Producto")
+        self.addWidget(self.label)
+
+        self.combo_cultivos = self.query_fill_combo(QComboBox(self.widgetParent),'SELECT * from cultivos()')
         self.combo_cultivos.currentTextChanged.connect(self.combobox_change_func)
 
         self.button_agregar=QPushButton('Agregar ingrediente',self.widgetParent)
@@ -21,6 +25,7 @@ class Producto(QVBoxLayout):
         self.addWidget(self.combo_cultivos)
         self.addWidget(self.button_agregar)
 
+    # Llena un combobox con un query
     def query_fill_combo(self,combo_box,query : str):
         from .con_db import con_db
         results =con_db(query)
@@ -34,13 +39,25 @@ class Producto(QVBoxLayout):
         finally:
             return combo_box
 
+    #Al cambiar de cultivo elimina todos los ingredientes y pone uno vacio
     def combobox_change_func(self,value):
         for ingrediente in self.ingredientes:
             for i in reversed(range(ingrediente.count())): 
                 ingrediente.itemAt(i).widget().deleteLater()
+        self.ingredientes=[]
         self.value=value
         self.agregarIngredientes()
 
+    #funcion para agregar ingredientes
     def agregarIngredientes(self):
-        self.ingredientes.append(Ingredientes(self.widgetParent,self.value))
+        self.ingredientes.append(Ingredientes(self.widgetParent,self))
         self.insertLayout(self.count()-1,self.ingredientes[-1])
+
+    #devuelve el cultivo con la lista de ingredientes seleccionados
+    def obtenerInfo(self):
+        if(self.combo_cultivos.currentIndex()==0):
+            return None
+        listaIngredientes=[]
+        for ingrediente in self.ingredientes:
+            listaIngredientes.append(ingrediente.obtenerInfo()) ##Lista de diccionarios
+        return {'cultivo':self.combo_cultivos.currentText(),'Ingredientes':listaIngredientes}
