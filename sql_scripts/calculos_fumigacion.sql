@@ -12,7 +12,8 @@ RETURNS TABLE(
 	total_descarga_x_ha_en_LHa FLOAT,--'Total de descarga por hectárea en litros por hectárea',
 	total_Producto_N_x_area_total_en_LTotalHa FLOAT[],--'Total de Producto N x área total en litros por total de total de hectáreas',
 	total_agua_x_area_total_en_LTotalHa FLOAT,--'Total de Agua por área total en Litros por total de hectáreas',
-	total_descarga_x_area_total_en_LTotalHa FLOAT--'Total de descarga por área total en Litros por total de hectáreas'
+	total_descarga_x_area_total_en_LTotalHa FLOAT,--'Total de descarga por área total en Litros por total de hectáreas'
+	area_a_fumigar FLOAT
 ) 
 AS $$
 DECLARE
@@ -89,7 +90,8 @@ BEGIN
 		total_descarga_x_ha_en_LHa,
 		total_Producto_N_x_area_total_en_LTotalHa,
 		total_agua_x_area_total_en_LTotalHa,
-		total_descarga_x_area_total_en_LTotalHa);
+		total_descarga_x_area_total_en_LTotalHa,
+		area_fumigar);
 END $$
 LANGUAGE plpgsql;
 
