@@ -11,6 +11,6 @@ class DronWidget(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)## Agregar colores solo a este widget
         self.setObjectName("dronWidget")
         self.setStyleSheet("QWidget#dronWidget {background-color: Gainsboro;border:2px solid black; }")
-    
+        
     def obtenerInfo(self):##Llama el obtenerInfo del DronLayout
         return self.layout.obtenerInfo()

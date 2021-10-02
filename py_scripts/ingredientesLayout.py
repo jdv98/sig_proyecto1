@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+import re
 
 class Ingredientes(QHBoxLayout):
     def __init__(self,widgetParent,parentLayout):
@@ -41,6 +42,8 @@ class Ingredientes(QHBoxLayout):
 
     ##Obtiene la dosis y el tipo de medida
     def combobox_change_func(self,value):
+        if(self.combo_ingredientes.currentIndex()==0):
+            return
         from .con_db import con_db
         self.dosis_medida=con_db("SELECT * FROM dosis_ingredientes('"+self.cultivo+"','"+value+"')")[0]
         self.qspinbox.setMinimum(self.dosis_medida[0])
@@ -56,5 +59,8 @@ class Ingredientes(QHBoxLayout):
 
     def obtenerInfo(self):
         if(self.combo_ingredientes.currentIndex()>0):
-            return {'ingrediente':self.combo_ingredientes.currentText(),'dosis':self.qspinbox.value(),'medida':self.dosis_medida[3]}
+            dosis=self.qspinbox.value()
+            if(re.search('ml/ha', self.dosis_medida[3], re.IGNORECASE) ): #Hace conversion de ml a litros
+                dosis=dosis/1000
+            return {'Ingrediente':self.combo_ingredientes.currentText(),'dosis':dosis}
         return None

@@ -51,6 +51,6 @@ class DronLayout(QVBoxLayout):
     #retorna la informacion del dron seleccionado y su configuracion
     def obtenerInfo(self):
         if(self.combo_dron.currentIndex()>0 and self.combo_config.currentIndex()>0):
-            return {'drone':self.result_dron[self.combo_dron.currentIndex()-1],'config_drone':self.result_config[self.combo_config.currentIndex()-1] }
+            return {'drone':self.result_dron[self.combo_dron.currentIndex()-1][0],'config_drone':self.result_config[self.combo_config.currentIndex()-1][0] }
         else:
             return None
