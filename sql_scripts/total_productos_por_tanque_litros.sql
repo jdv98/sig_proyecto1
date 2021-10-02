@@ -1,15 +1,13 @@
 --Dosis del producto (en litros)/Total de Llenadas de tanque por hectárea (números de vuelos por hectárea)
---Devuelte litros
-
+--Devuelte un arreglo con los litros
+DROP FUNCTION total_producto_por_tanque_litros(dosis FLOAT[],total_llenadas_tanque_hectarea FLOAT);
 CREATE OR REPLACE FUNCTION total_producto_por_tanque_litros(dosis FLOAT[],total_llenadas_tanque_hectarea FLOAT)
-RETURNS TABLE(
-	total_producto_por_tanque FLOAT
-)
+RETURNS FLOAT[]
 AS $$
 BEGIN
-	RETURN QUERY
-	SELECT (d/total_llenadas_tanque_hectarea)
-	FROM UNNEST(dosis) d;
+	RETURN
+	(SELECT ARRAY_AGG(d/total_llenadas_tanque_hectarea)
+	FROM UNNEST(dosis) d);
 END $$
 LANGUAGE plpgsql;
 
