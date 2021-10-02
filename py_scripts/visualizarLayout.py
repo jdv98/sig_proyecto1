@@ -1,7 +1,9 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from qgis.core import QgsProject
+from qgis.core import QgsProject,Qgis
+import qgis
+
 
 
 class VisualizarLayout (QGridLayout):
@@ -15,7 +17,8 @@ class VisualizarLayout (QGridLayout):
 
     
     def build(self):
-        datos_a_mostrar=[
+        datos_a_mostrar=[## Lista con todas las etiquetas que se deben mostrar
+                        ##Las que estan marcadas con un numero se repiten N veces y se sustituye el '{}' por un valor 
             'Total de descarga por Ha en litros por hectárea',
             'Total de llenadas de tanque por hectárea',
             'Total litros a descargar por área total en litros',
@@ -32,8 +35,11 @@ class VisualizarLayout (QGridLayout):
         ]
 
         consulta=self.consulta()
+        if(consulta is None):
+            self.widgetParent.deleteLater()
+            return
 
-        for index_dato in range(0,len(datos_a_mostrar)):
+        for index_dato in range(0,len(datos_a_mostrar)):##Recorre la lista anterior y ademas respite N veces cuando esta en la etiqueta 4,6 y 9
             if(index_dato==4 or index_dato==6 or index_dato==9 ):
                 for sub in range(0,len(consulta[index_dato])):
                     self.listaLabels.append(QLabel(datos_a_mostrar[index_dato].format(sub+1,self.datos['Ingredientes'][sub]['Ingrediente']),self.widgetParent))
@@ -45,7 +51,7 @@ class VisualizarLayout (QGridLayout):
                 self.listaLabels.append(QLabel(str(consulta[index_dato]),self.widgetParent))
                 self.agregarLabel()
  
-    def agregarLabel(self):
+    def agregarLabel(self):##Se encarga de darle color a las 2 ultimas etiquetas y agregarlas al widget
         if(self.contador%2==0):
             self.listaLabels[-1].setStyleSheet("background-color: Gainsboro;border:2px solid black;")
             self.listaLabels[-2].setStyleSheet("background-color: Gainsboro;border:2px solid black;")
@@ -56,6 +62,8 @@ class VisualizarLayout (QGridLayout):
         self.addWidget(self.listaLabels[-1],self.contador,1)
         self.contador+=1
 
+    ##Se encarga de juntar todos los datos recolectados para hacer la consulta sobre los calculos
+    ##Ademas de agarrar la respectiva seleccion de las capas
     def consulta(self):
         from .con_db import con_db
         area=0
@@ -71,6 +79,12 @@ class VisualizarLayout (QGridLayout):
                 self.agrupa_atrib_capa_comas(bloques),
                 self.agrupa_atrib_capa_comas(terrazas)
                 ))[0][0]
+        elif(self.datos['filtro']==1):
+            qgis.utils.iface.messageBar().pushMessage("Error", "Para el filtro 1 seleccione la capa terrazas", level=Qgis.Critical)
+            return None
+        else:
+            qgis.utils.iface.messageBar().pushMessage("Error", "Para el filtro 2 la capa terrazas y bloques deben estar seleccionadas", level=Qgis.Critical)
+            return None
         
         dosis=self.dosis_comas()
 

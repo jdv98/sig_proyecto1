@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from qgis.core import Qgis
+import qgis
 from .ingredientesLayout import Ingredientes
 
 class Producto(QVBoxLayout):
@@ -56,8 +58,16 @@ class Producto(QVBoxLayout):
     #devuelve el cultivo con la lista de ingredientes seleccionados
     def obtenerInfo(self):
         if(self.combo_cultivos.currentIndex()==0):
+            qgis.utils.iface.messageBar().pushMessage("Error", "Se debe seleccionar un cultivo", level=Qgis.Critical)
             return None
         listaIngredientes=[]
         for ingrediente in self.ingredientes:
-            listaIngredientes.append(ingrediente.obtenerInfo()) ##Lista de diccionarios
-        return {'cultivo':self.combo_cultivos.currentText(),'Ingredientes':listaIngredientes}
+            ing=ingrediente.obtenerInfo()
+            if(ing is None):
+                return None
+            listaIngredientes.append(ing) ##Lista de diccionarios
+        if(len(listaIngredientes)>0):
+            return {'cultivo':self.combo_cultivos.currentText(),'Ingredientes':listaIngredientes}
+        else:
+            qgis.utils.iface.messageBar().pushMessage("Error", "Se debe seleccionar al menos un ingrediente para el cultivo", level=Qgis.Critical)
+            return None

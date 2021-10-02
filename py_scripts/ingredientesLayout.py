@@ -1,8 +1,9 @@
-import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import re
+from qgis.core import Qgis
+import qgis
 
 class Ingredientes(QHBoxLayout):
     def __init__(self,widgetParent,parentLayout):
@@ -63,4 +64,5 @@ class Ingredientes(QHBoxLayout):
             if(re.search('ml/ha', self.dosis_medida[3], re.IGNORECASE) ): #Hace conversion de ml a litros
                 dosis=dosis/1000
             return {'Ingrediente':self.combo_ingredientes.currentText(),'dosis':dosis}
+        qgis.utils.iface.messageBar().pushMessage("Error", "Eliminar las casillas de ingredientes sin datos", level=Qgis.Critical)
         return None

@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from qgis.core import Qgis
+import qgis
 
 class DronLayout(QVBoxLayout):
     def __init__(self,widgetParent):
@@ -53,4 +55,5 @@ class DronLayout(QVBoxLayout):
         if(self.combo_dron.currentIndex()>0 and self.combo_config.currentIndex()>0):
             return {'drone':self.result_dron[self.combo_dron.currentIndex()-1][0],'config_drone':self.result_config[self.combo_config.currentIndex()-1][0] }
         else:
+            qgis.utils.iface.messageBar().pushMessage("Error", "Seleccionar los datos del dron", level=Qgis.Critical)
             return None

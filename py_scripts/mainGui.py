@@ -28,12 +28,16 @@ class GuiLayout(QVBoxLayout):
         self.addWidget(self.button)
 
     def imprimir(self,value):##Converge todos los datos de los widgets
-        datos=(self.dronWidget.obtenerInfo())
-        datos.update(self.productoWidget.obtenerInfo())
-        datos.update(self.seleccionFiltroWidget.obtenerInfo())
+        dron=(self.dronWidget.obtenerInfo())
+        producto=(self.productoWidget.obtenerInfo())
+        filtro=(self.seleccionFiltroWidget.obtenerInfo())
 
-        self.visualizarWidget=VisualizarWidget(datos) ##Llama el widget encargado de procesar y mostrar los datos
-        self.visualizarWidget.show()
+        if( (dron is not None) and (producto is not None) and (filtro is not None) ):
+            datos=dron
+            datos.update(producto)
+            datos.update(filtro)
+            self.visualizarWidget=VisualizarWidget(datos) ##Llama el widget encargado de procesar y mostrar los datos
+            self.visualizarWidget.show()
 
     def closeEvent(self, event):
         self.seleccionFiltroWidget.close()

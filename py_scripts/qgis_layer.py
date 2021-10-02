@@ -44,7 +44,7 @@ class QgisLayer():
                 del(srid)
                 return True
             except:
-                qgis.utils.self.iface.messageBar().pushMessage("Error", "No se pudo conectar a la base de datos", level=Qgis.Critical)
+                qgis.utils.iface.messageBar().pushMessage("Error", "No se pudo conectar a la base de datos", level=Qgis.Critical)
                 return False
 
     def agregarCapa(self,nombre):
