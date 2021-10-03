@@ -11,6 +11,15 @@ Cálculo automatizado de insumos para la fumigación con drones
 
 ---
 
+## Recomendacion para la base de datos
+
+Restaurar [respaldo_completo.sql](sql_scripts/respaldo_completo.sql) en vez de correr todos los archivos .sql para tener los datos por defecto en las tablas:
+- drones
+- configuraciones
+- productos
+
+---
+
 ## Conexión a la base de datos
 
 Cambiar los datos del archivo [database.ini](database.ini) por los correspondientes a la base con la que se desea conectar y mover el archivo a el mismo directorio del proyecto .qgz .
