@@ -3,7 +3,7 @@ from configparser import ConfigParser
 from qgis.core import QgsProject,QgsDataSourceUri,QgsVectorLayer,Qgis
 import re
 
-class QgisLayer():
+class QgisLayer():#Se encarga de cargar las capas en Qgis
     def __init__(self,iface) -> None:
         self.iface=iface
 
@@ -17,7 +17,7 @@ class QgisLayer():
 
             self.uri = QgsDataSourceUri()
             try:
-                cp=ConfigParser()
+                cp=ConfigParser()#Carga del database.ini
                 cp.read(QgsProject.instance().readPath("./")+'/database.ini')
                 self.uri.setConnection(cp._sections['postgresql']['host'], 
                         "5432", 
@@ -26,7 +26,7 @@ class QgisLayer():
                         cp._sections['postgresql']['password'])
 
                 del(srid_re)
-                bloque_layer=QgsProject.instance().mapLayersByName("bloques")
+                bloque_layer=QgsProject.instance().mapLayersByName("bloques")#Extrae la capa de Qgis
                 terrazas_layer=QgsProject.instance().mapLayersByName("terrazas")
 
                 if(len(bloque_layer)==0):
@@ -47,7 +47,7 @@ class QgisLayer():
                 qgis.utils.iface.messageBar().pushMessage("Error", "No se pudo conectar a la base de datos", level=Qgis.Critical)
                 return False
 
-    def agregarCapa(self,nombre):
+    def agregarCapa(self,nombre):#Agrega un capa de postgres en qgis
         self.uri.setDataSource('public',nombre,'geom'+re.search('(?<=:).*', self.iface.mapCanvas().mapSettings().destinationCrs().authid()).group(0),'','id')
         vlayer = QgsVectorLayer(self.uri.uri(), nombre,"postgres")
         QgsProject.instance().addMapLayer(vlayer)
