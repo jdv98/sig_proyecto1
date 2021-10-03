@@ -23,3 +23,9 @@ Restaurar [respaldo_completo.sql](sql_scripts/respaldo_completo.sql) en vez de c
 ## Conexión a la base de datos
 
 Cambiar los datos del archivo [database.ini](database.ini) por los correspondientes a la base con la que se desea conectar y mover el archivo a el mismo directorio del proyecto .qgz .
+
+---
+
+## Video de uso
+
+https://youtu.be/1pvB_P9DcH8
